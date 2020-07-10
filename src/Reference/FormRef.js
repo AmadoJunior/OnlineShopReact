@@ -5,7 +5,7 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 //CSS
-import styles from "./Form.module.css";
+import styles from "./Checkout.module.css";
 
 function Form(props){
     const stripe = useStripe();
@@ -41,6 +41,17 @@ function Form(props){
             })
             .then((data) => {
                 console.log(data);
+                return stripe.confirmCardPayment(data.client_secret, {
+                    payment_method: {
+                        card: elements.getElement(CardElement),
+                        billing_details: {
+                            name: name
+                        }
+                    }
+                });
+            })
+            .then((result) => {
+                console.log(result);
             })
         }
     }
@@ -48,7 +59,7 @@ function Form(props){
     return (
         <div className={styles.container}>
             <form onSubmit={handleSubmit}>
-                <label for="Name">Name: </label>
+                <label htmlFor="Name">Name: </label>
                 <input 
                 type="text" 
                 placeholder="Name" 
