@@ -1,0 +1,10 @@
+.container{
+    display:flex;
+    width: 100vw;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+}
+.options{
+    margin: 10px;
+}

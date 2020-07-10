@@ -11,7 +11,7 @@ import styles from "./Checkout.module.css";
 function Checkout(){
     return (
         <div className={styles.container}>
-            
+            <h1>Checkout</h1>
         </div>
     )
 }
