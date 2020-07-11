@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
+import CartContext from "./../../../../Context/CartContext";
 import styles from "./Products.module.css";
 
 function Products(){
-
     const [products, setProducts] = useState([]);
+    const cartContext = useContext(CartContext);
 
     useEffect(() => {
         fetch("/products")
@@ -35,6 +36,7 @@ function Products(){
                                 <span className={styles.price}>${item.price}</span>
                                 <button 
                                 className={styles.addToCart}
+                                onClick={() => cartContext.addToCart(item)}
                                 >Add to Cart</button>
                             </div>
                             

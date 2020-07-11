@@ -1,0 +1,11 @@
+.container{
+    width: 500px;
+    padding: 20px;
+    margin: 15px;
+}
+.errorDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

@@ -19,7 +19,8 @@ function TopBar(){
                 <Link to="/products" className={styles.options}>Products</Link>
                 <span onClick={handlePopUp} className={styles.options}>Cart</span>
                 <Cart
-                visibility={cartVisibility}>
+                visibility={cartVisibility}
+                handlePopUp={handlePopUp}>
                 </Cart>
             </nav>
         </div>
