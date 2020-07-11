@@ -17,7 +17,7 @@ function TopBar(){
             <nav>
                 <Link to="/" className={styles.options}>Home</Link>
                 <Link to="/products" className={styles.options}>Products</Link>
-                <button onClick={handlePopUp} className={styles.options}>Cart</button>
+                <span onClick={handlePopUp} className={styles.options}>Cart</span>
                 <Cart
                 visibility={cartVisibility}>
                 </Cart>

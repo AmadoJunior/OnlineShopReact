@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React from "react";
 //Stripe
-import {
-  CardElement,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js';
+// import {
+//   CardElement,
+//   useStripe,
+//   useElements,
+// } from '@stripe/react-stripe-js';
 //CSS
 import styles from "./Checkout.module.css";
 
