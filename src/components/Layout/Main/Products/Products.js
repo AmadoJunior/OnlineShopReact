@@ -18,22 +18,31 @@ function Products(){
 
     return (
         <div className={styles.container}>
-            <h1>Products</h1>
             <div className={styles.list}>
             {
-                products.map((item) => {
+                products.map((item, i) => {
+                    let backgroundStyle = {
+                        background: ``
+                    }
+                    if(i%2 === 0){
+                        backgroundStyle.background = `linear-gradient(105.4deg,  #DDDDDD 0%, rgba(226, 226, 226, 0) 99.13%)`;
+                    } else {
+                        backgroundStyle.background = `linear-gradient(285.44deg, #DDDDDD 0%, rgba(226, 226, 226, 0) 99.13%)`;
+                    }
+
                     return(
                         <div 
                         className={styles.itemContainer}
+                        style={backgroundStyle}
                         key={item._id}
                         >
-                            <h3>{item.name}</h3>
                             <img 
                             alt="thumbNail"
                             className={styles.thumbNail}
                             src={item.imgUrl}></img>
-                            <div>
-                                <span className={styles.price}>${item.price}</span>
+                            <div className={styles.details}>
+                                <h3 className={styles.title}>{item.name}</h3>
+                                <span className={styles.price}>Price: ${item.price}</span>
                                 <button 
                                 className={styles.addToCart}
                                 onClick={() => cartContext.addToCart(item)}
