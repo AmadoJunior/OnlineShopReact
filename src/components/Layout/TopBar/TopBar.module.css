@@ -1,15 +1,46 @@
 .container{
     display:flex;
-    width: 100vw;
-    justify-content: space-between;
+    position: relative;
     align-items: center;
-    border: 1px solid black;
+    justify-content: space-between;
+    min-width: 800px;
+    color: white;
+    margin: 10px 10px 10px 10px;
+    padding: 0px 10px 0px 10px;
+    background: radial-gradient(35.59% 27820.2% at 49.18% 50%, rgba(58, 58, 58, 0.03) 0%, #232323 100%);
 }
 .options{
     cursor: pointer;
     margin: 15px;
     text-decoration: none;
     border: none;
-    color: black;
+    color: white;
     font-size: 17px;
+}
+.logo{
+    margin: 10px;
+}
+.searchBar{
+    border-radius: 20px;
+    padding: 10px;
+    width: 800px;
+    border: none;
+}
+.cart{
+    cursor: pointer;
+    height: 35px;
+    width: 35px;
+    padding: 0px 25px 0px 25px;
+    margin: 5px 15px 5px 15px;
+    border-radius: 20px;
+    background: linear-gradient(-30deg, #2D2D2D 35.18%, #8E8E8E 125.76%);
+    box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.34), 3px 3px 8px rgba(0, 0, 0, 0.89);
+}
+.cart:hover{
+    background: linear-gradient(121.66deg, #2D2D2D 15.18%, #8E8E8E 155.76%) !important;
+}
+nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

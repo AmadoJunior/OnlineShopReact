@@ -12,6 +12,7 @@ function Cart(props){
 
     return (
         <div className={styles.container}>
+            <div className={styles.triangle}></div>
             <h1>Cart</h1>
             <ul>
             {

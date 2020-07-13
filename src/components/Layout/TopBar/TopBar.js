@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import Cart from "./Cart/Cart";
 import styles from "./TopBar.module.css";
+import cart from "./../../../assets/cart.png";
 
 function TopBar(){
     const [cartVisibility, setVisibility] = useState(false);
@@ -13,11 +14,12 @@ function TopBar(){
 
     return (
         <div className={styles.container}>
-            <h1>LOGO</h1>
+            <h1 className={styles.logo}>LOGO</h1>
+            <input type="text" className={styles.searchBar} placeholder="Search"></input>
             <nav>
                 <Link to="/" className={styles.options}>Home</Link>
                 <Link to="/products" className={styles.options}>Products</Link>
-                <span onClick={handlePopUp} className={styles.options}>Cart</span>
+                <img src={cart} onClick={handlePopUp} className={styles.cart}></img>
                 <Cart
                 visibility={cartVisibility}
                 handlePopUp={handlePopUp}>
