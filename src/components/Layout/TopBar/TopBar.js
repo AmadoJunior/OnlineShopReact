@@ -1,11 +1,13 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import {Link} from "react-router-dom";
+import CartContext from "./../../../Context/CartContext";
 import Cart from "./Cart/Cart";
 import styles from "./TopBar.module.css";
 import cart from "./../../../assets/cart.png";
 
 function TopBar(){
     const [cartVisibility, setVisibility] = useState(false);
+    const cartContext = useContext(CartContext);
 
     const handlePopUp = () => {
         let temp = cartVisibility;
@@ -19,6 +21,16 @@ function TopBar(){
     } else {
         cartBtnClass = styles.cartOff;
     }
+    let hide;
+    if(cartContext.cart.length <= 0){
+        hide={
+            visibility: `hidden`
+        }
+    } else {
+        hide={
+            visibility: `visible`
+        }
+    }
 
     return (
         <div className={styles.container}>
@@ -28,6 +40,7 @@ function TopBar(){
                 <Link to="/" className={styles.options}>Home</Link>
                 <Link to="/products" className={styles.options}>Products</Link>
                 <img src={cart} onClick={handlePopUp} className={cartBtnClass}></img>
+                <span style={hide} className={styles.itemsInCart}>{cartContext.cart.length}</span>
                 <Cart
                 visibility={cartVisibility}
                 handlePopUp={handlePopUp}>
