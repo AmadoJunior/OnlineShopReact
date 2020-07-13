@@ -16,7 +16,7 @@ function Form(props){
     //State
     const stripe = useStripe();
     const elements = useElements();
-    const [name, setName] = useState("");
+    const [details, setDetails] = useState({});
     const [disabledBtn, setDisabledBtn] = useState(false);
     const [error, setError] = useState(null);
     const [order, setOrder] = useState({
@@ -24,13 +24,46 @@ function Form(props){
         details: {}
     });
 
+    //Details
+    const setFirstName = (e) => {
+        let tempDetails = {...details};
+        tempDetails.firstName = e.target.value;
+        setDetails(tempDetails);
+    }
+    const setLastName = (e) => {
+        let tempDetails = {...details};
+        tempDetails.lastName = e.target.value;
+        setDetails(tempDetails);
+    }
+    const setAddress1 = (e) => {
+        let tempDetails = {...details};
+        tempDetails.address1 = e.target.value;
+        setDetails(tempDetails);
+    }
+    const setAddress2 = (e) => {
+        let tempDetails = {...details};
+        tempDetails.address2 = e.target.value;
+        setDetails(tempDetails);
+    }
+
     const handleSubmit = async(event) => {
         event.preventDefault();
+        //Error prevention
+        if(props.cart <= 1){
+            setError("Cart is Empty");
+            return;
+        }
+        if(Object.keys(details).length < 4){
+            setError("Missing Details");
+                return;
+        }
+
+        //Creating payment method
         let {error, paymentMethod} = await stripe.createPaymentMethod({
             type: "card",
             card: elements.getElement(CardElement)
         })
-
+        //If payment method successfully added
         if(!error){
             //Retrieving items to order and the payment method ID 
             let cardProductsIDArray = [];
@@ -43,6 +76,7 @@ function Form(props){
                 productIDArray: cardProductsIDArray,
                 id: id
             }
+            console.log("Payment Method ID: " + id);
 
             setDisabledBtn(true);
             setError(null);
@@ -58,34 +92,44 @@ function Form(props){
                 return res.json();
             })
             .then((data) => {
-                console.log(data);
-                if(data.client_secret){
-                    return stripe.confirmCardPayment(data.client_secret, {
-                        payment_method: {
-                            card: elements.getElement(CardElement),
-                            billing_details: {
-                                name: name
-                            }
+                console.log("Client Secret: " + data.client_secret);
+                return stripe.confirmCardPayment(data.client_secret, {
+                    payment_method: {
+                        card: elements.getElement(CardElement),
+                        billing_details: {
+                            name: `${details.firstName} ${details.lastName}`
                         }
-                    });
-                } else {
-                    return {error: data.error}
-                }
+                    }
+                });
+
             })
             .then((result) => {
+                console.log("Client Secret Response Object: ");
                 console.log(result);
                 if(result.paymentIntent && result.paymentIntent.status === "succeeded"){
+                    console.log("Payment Intent Success");
                     setOrder({
                         status: true,
                         details: result.paymentIntent
                     })
                     cartContext.emptyCart();
+                    /**
+                     * Send Order object to back end here
+                     * 
+                     * 
+                     * 
+                     * 
+                     */
+                    console.log("Successful Order Details: ");
+                    console.log(details);
                 } else {
-                    setError(result.error.code);
+                    console.log("Error Signing Payment Intent")
+                    setError(result.error.message);
+                    setDisabledBtn(false);
                 }
             })
         } else {
-            console.log(error);
+            //Set the error coming from stripe.createPaymentMethod
             setError(error.message);
         }
     }
@@ -93,16 +137,44 @@ function Form(props){
     //Render
     if(!order.status){
         form = (
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="Name">Name: </label>
+            <form onSubmit={handleSubmit} className={styles.formContainer}>
+                <label htmlFor="FirstName"
+                className={styles.detailLabel}>First Name: </label>
                 <input 
+                className={styles.details}
                 type="text" 
-                placeholder="Name" 
-                id="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                placeholder="First Name" 
+                id="FirstName"
+                onChange={setFirstName}
                 ></input>
+                <label htmlFor="LastName"
+                className={styles.detailLabel}>Last Name: </label>
+                <input
+                className={styles.details}
+                placeholder="Last Name"
+                id="LastName"
+                type="text"
+                onChange={setLastName}
+                ></input>
+                <label htmlFor="Address1"
+                className={styles.detailLabel}>Address Line 1: </label>
+                <input
+                className={styles.details}
+                placeholder="Address Line 1"
+                id="Address1"
+                type="text"
+                onChange={setAddress1}></input>
+                <label htmlFor="Address2"
+                className={styles.detailLabel}>Address Line 2: </label>
+                <input
+                className={styles.details}
+                placeholder="Address Line 2"
+                id="Address2"
+                type="text"
+                onChange={setAddress2}></input>
+                <CardElement className={styles.cardElement}/>
                 <ul>
+                    <h4>Your Order: </h4>
                     {
                         props.cart.map((item) => {
                             return(
@@ -111,11 +183,10 @@ function Form(props){
                         })
                     }
                 </ul>
-                <CardElement />
                 <div className={styles.errorDiv}>
-                {error}
+                <span className={styles.errorMsg}>{error}</span>
                 {
-                    !disabledBtn ? <button type="submit" disabled={!stripe}>Pay</button> : null
+                    !disabledBtn && stripe ? <button className={styles.pay} type="submit">Pay</button> : <span className={styles.submiting}>Submiting...</span>
                 }
                 </div>
             </form>
@@ -123,9 +194,10 @@ function Form(props){
     } else {
         form = (
             <div>
-                <h3>Thank you</h3>
+                <h3>Thank you, {details.firstName} {details.lastName}!</h3>
                 <p>Amount Charged: ${order.details.amount/100}</p>
                 <p>Order ID: {order.details.id}</p>
+                <p>Shipping Address: {details.address1}, {details.address2}</p>
             </div>
         )
     }

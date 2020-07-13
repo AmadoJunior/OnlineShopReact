@@ -2,6 +2,31 @@ h1{
   margin: 15px 0px 0px 0px;
 }
 
+ul{
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+ul li{
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 10px;
+  margin: 5px;
+}
+
+.rm{
+  cursor: pointer;
+  width: 12px;
+  height: 12px;
+  margin-right: 10px;
+  transition: .1s;
+}
+.rm:hover{
+  transform: scale(1.2);
+}
+
 .container{
     z-index: 1;
     position: absolute;

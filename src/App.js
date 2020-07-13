@@ -31,7 +31,7 @@ function App() {
       }
     }
     setCart(tempArr);
-    if(cart.length <= 0){
+    if(cart.length <= 1){
       setEmpty(true);
     }
   }

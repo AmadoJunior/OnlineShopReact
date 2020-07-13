@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import CartContext from "./../../../../Context/CartContext";
 import {Link} from "react-router-dom";
 import styles from "./Cart.module.css";
+import rm from "./../../../../assets/rm.png";
 
 function Cart(props){
     const cartContext = useContext(CartContext);
@@ -19,7 +20,14 @@ function Cart(props){
                 cartContext.cart.map((item) => {
                     return(
                         <li
-                        key={item._id}>{item.name}</li>
+                        key={item._id}>
+                        <img 
+                        src={rm} 
+                        className={styles.rm}
+                        onClick={() => cartContext.rmFromCart(item._id)}>
+                        </img>
+                        {item.name}
+                        </li>
                     )
                 })
             }
