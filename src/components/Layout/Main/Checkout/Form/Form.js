@@ -75,6 +75,7 @@ function Form(props){
         setDetails(tempDetails);
     }
 
+    //Methods
     const handleSubmit = async(event) => {
         event.preventDefault();
         //Error prevention
@@ -194,72 +195,95 @@ function Form(props){
     if(!order.status){
         form = (
             <form onSubmit={handleSubmit} className={styles.formContainer}>
+
                 <label htmlFor="FirstName"
-                className={styles.detailLabel}>First Name: </label>
+                    className={styles.detailLabel}>First Name: 
+                </label>
                 <input 
-                className={styles.details}
-                type="text" 
-                placeholder="First Name" 
-                id="FirstName"
-                onChange={setFirstName}
+                    className={styles.details}
+                    type="text" 
+                    placeholder="First Name" 
+                    id="FirstName"
+                    onChange={setFirstName}
                 ></input>
+
                 <label htmlFor="LastName"
-                className={styles.detailLabel}>Last Name: </label>
+                    className={styles.detailLabel}>Last Name: 
+                </label>
                 <input
-                className={styles.details}
-                placeholder="Last Name"
-                id="LastName"
-                type="text"
-                onChange={setLastName}
+                    className={styles.details}
+                    placeholder="Last Name"
+                    id="LastName"
+                    type="text"
+                    onChange={setLastName}
                 ></input>
+
                 <label htmlFor="Address1"
-                className={styles.detailLabel}>Address Line 1: </label>
+                    className={styles.detailLabel}>Address Line 1: 
+                </label>
                 <input
-                className={styles.details}
-                placeholder="Address Line 1"
-                id="Address1"
-                type="text"
-                onChange={setAddress1}></input>
+                    className={styles.details}
+                    placeholder="Address Line 1"
+                    id="Address1"
+                    type="text"
+                    onChange={setAddress1}>
+                </input>
+
                 <label htmlFor="Address2"
-                className={styles.detailLabel}>Address Line 2: </label>
+                    className={styles.detailLabel}>Address Line 2: 
+                </label>
                 <input
-                className={styles.details}
-                placeholder="Address Line 2"
-                id="Address2"
-                type="text"
-                onChange={setAddress2}></input>
+                    className={styles.details}
+                    placeholder="Address Line 2"
+                    id="Address2"
+                    type="text"
+                    onChange={setAddress2}>
+                </input>
+
                 <label htmlFor="City"
-                className={styles.detailLabel}>City: </label>
+                    className={styles.detailLabel}>City: 
+                </label>
                 <input
-                className={styles.details}
-                placeholder="City"
-                id="City"
-                type="text"
-                onChange={setCity}></input>
+                    className={styles.details}
+                    placeholder="City"
+                    id="City"
+                    type="text"
+                    onChange={setCity}>
+                </input>
+
                 <label htmlFor="State"
-                className={styles.detailLabel}>State: </label>
+                    className={styles.detailLabel}>State: 
+                </label>
                 <input
-                className={styles.details}
-                placeholder="State"
-                id="State"
-                type="text"
-                onChange={setState}></input>
+                    className={styles.details}
+                    placeholder="State"
+                    id="State"
+                    type="text"
+                    onChange={setState}> 
+                </input>
+
                 <label htmlFor="Zip"
-                className={styles.detailLabel}>ZIP: </label>
+                    className={styles.detailLabel}>ZIP: 
+                </label>
                 <input
-                className={styles.details}
-                placeholder="ZIP"
-                id="Zip"
-                type="text"
-                onChange={setZipCode}></input>
+                    className={styles.details}
+                    placeholder="ZIP"
+                    id="Zip"
+                    type="text"
+                    onChange={setZipCode}>
+                </input>
+
                 <label htmlFor="CountryCode"
-                className={styles.detailLabel}>Country Code: </label>
+                    className={styles.detailLabel}>Country Code: 
+                </label>
                 <input
-                className={styles.details}
-                placeholder="Country Code"
-                id="CountryCode"
-                type="text"
-                onChange={setCountryCode}></input>
+                    className={styles.details}
+                    placeholder="Country Code"
+                    id="CountryCode"
+                    type="text"
+                    onChange={setCountryCode}>
+                </input>
+
                 <CardElement className={styles.cardElement}/>
                 <ul>
                     <h4>Your Order: </h4>
