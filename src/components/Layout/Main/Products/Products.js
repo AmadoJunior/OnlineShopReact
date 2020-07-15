@@ -7,7 +7,7 @@ function Products(){
     const cartContext = useContext(CartContext);
 
     useEffect(() => {
-        fetch("/products")
+        fetch("/api/products")
         .then(res => res.json())
         .then(data => {
             setProducts(data);

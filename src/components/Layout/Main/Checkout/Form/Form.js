@@ -16,7 +16,16 @@ function Form(props){
     //State
     const stripe = useStripe();
     const elements = useElements();
-    const [details, setDetails] = useState({});
+    const [details, setDetails] = useState({
+        firstName: null,
+        lastName: null,
+        address1: null,
+        address2: null,
+        city: null,
+        state: null,
+        zipCode: null,
+        countryCode: null
+    });
     const [disabledBtn, setDisabledBtn] = useState(false);
     const [error, setError] = useState(null);
     const [order, setOrder] = useState({
@@ -45,6 +54,26 @@ function Form(props){
         tempDetails.address2 = e.target.value;
         setDetails(tempDetails);
     }
+    const setCity = (e) => {
+        let tempDetails = {...details};
+        tempDetails.city = e.target.value;
+        setDetails(tempDetails);
+    }
+    const setState = (e) => {
+        let tempDetails = {...details};
+        tempDetails.state = e.target.value;
+        setDetails(tempDetails);
+    }
+    const setZipCode = (e) => {
+        let tempDetails = {...details};
+        tempDetails.zipCode = e.target.value;
+        setDetails(tempDetails);
+    }
+    const setCountryCode = (e) => {
+        let tempDetails = {...details};
+        tempDetails.countryCode = e.target.value;
+        setDetails(tempDetails);
+    }
 
     const handleSubmit = async(event) => {
         event.preventDefault();
@@ -53,10 +82,37 @@ function Form(props){
             setError("Cart is Empty");
             return;
         }
-        if(Object.keys(details).length < 4){
-            setError("Missing Details");
+        for(let key in details){
+            if(details[key] === null || details[key].length <= 0){
+                setError("Missing Required Fields");
                 return;
+            }
         }
+        //Validating Address
+        fetch("/api/validateAddress", {
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(details)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            if(data.XAVResponse.ValidAddressIndicator === ""){
+                console.log("Valid Address");
+            } else if(data.XAVResponse.AmbiguousAddressIndicator === ""){
+                const candidate = data.XAVResponse.Candidate.AddressKeyFormat || data.XAVResponse.Candidate[0].AddressKeyFormat;
+                setError(`Did you mean: "${candidate.AddressLine}, ${candidate.Region}"? `);
+            } else if(data.XAVResponse.NoCandidatesIndicator === ""){
+                setError("Ambiguous Address: No Candidates Found");
+            }
+        })
+        .catch(e => {
+            console.log(e);
+            setError("Failed to Verify: Check Country Code");
+            return;
+        })
 
         //Creating payment method
         let {error, paymentMethod} = await stripe.createPaymentMethod({
@@ -81,7 +137,7 @@ function Form(props){
             setDisabledBtn(true);
             setError(null);
 
-            fetch("/order", {
+            fetch("/api/order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -172,6 +228,38 @@ function Form(props){
                 id="Address2"
                 type="text"
                 onChange={setAddress2}></input>
+                <label htmlFor="City"
+                className={styles.detailLabel}>City: </label>
+                <input
+                className={styles.details}
+                placeholder="City"
+                id="City"
+                type="text"
+                onChange={setCity}></input>
+                <label htmlFor="State"
+                className={styles.detailLabel}>State: </label>
+                <input
+                className={styles.details}
+                placeholder="State"
+                id="State"
+                type="text"
+                onChange={setState}></input>
+                <label htmlFor="Zip"
+                className={styles.detailLabel}>ZIP: </label>
+                <input
+                className={styles.details}
+                placeholder="ZIP"
+                id="Zip"
+                type="text"
+                onChange={setZipCode}></input>
+                <label htmlFor="CountryCode"
+                className={styles.detailLabel}>Country Code: </label>
+                <input
+                className={styles.details}
+                placeholder="Country Code"
+                id="CountryCode"
+                type="text"
+                onChange={setCountryCode}></input>
                 <CardElement className={styles.cardElement}/>
                 <ul>
                     <h4>Your Order: </h4>
