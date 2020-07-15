@@ -15,16 +15,16 @@
     text-decoration: none;
     border: none;
     color: white;
-    font-size: 17px;
+    font-size: 16px;
 }
 .logo{
     margin: 10px;
     cursor: default;
 }
 .searchBar{
-    background-color: #505050;
+    background-color: #474747;
     border:none;
-    box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.329), 3px 3px 8px #000000;
+    box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.295), 3px 3px 8px #000000d0;
     border-radius: 20px;
     padding: 7px 7px 7px 20px;
     width: 800px;
@@ -42,8 +42,8 @@
     padding: 0px 25px 0px 25px;
     margin: 5px 15px 5px 15px;
     border-radius: 20px;
-    background: linear-gradient(-30deg, #2D2D2D 35.18%, #8E8E8E 125.76%);
-    box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.274), 3px 3px 8px rgba(0, 0, 0, 0.89);
+    background:  #474747;
+    box-shadow: -3px -3px 8px rgba(255, 255, 255, 0.322), 3px 3px 8px rgba(0, 0, 0, 0.89);
 }
 .cartOn{
     background: linear-gradient(121.66deg, #2D2D2D 15.18%, #8E8E8E 155.76%) !important;
