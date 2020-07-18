@@ -129,9 +129,10 @@ function Form(props){
                 cardProductsIDArray.push(items._id);
             }
             //Object to be sent to the back end
-            let order = {
+            let orderRequest = {
                 productIDArray: cardProductsIDArray,
-                id: id
+                id: id,
+                details: details
             }
             console.log("Payment Method ID: " + id);
 
@@ -143,7 +144,7 @@ function Form(props){
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(order)
+                body: JSON.stringify(orderRequest)
             })
             .then((res) => {
                 return res.json();
@@ -169,14 +170,26 @@ function Form(props){
                         status: true,
                         details: result.paymentIntent
                     })
-                    cartContext.emptyCart();
                     /**
-                     * Send Order object to back end here
+                     * Send successful order for storing
                      * 
                      * 
                      * 
                      * 
                      */
+
+                    fetch("api/order/add", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            paymentIntent: result.paymentIntent,
+                            shippingDetails: details,
+                            items: props.cart
+                        })
+                    })
+                    cartContext.emptyCart();
                     console.log("Successful Order Details: ");
                     console.log(details);
                 } else {
