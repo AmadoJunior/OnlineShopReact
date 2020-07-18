@@ -76,20 +76,7 @@ function Form(props){
     }
 
     //Methods
-    const handleSubmit = async(event) => {
-        event.preventDefault();
-        //Error prevention
-        if(props.cart <= 1){
-            setError("Cart is Empty");
-            return;
-        }
-        for(let key in details){
-            if(details[key] === null || details[key].length <= 0){
-                setError("Missing Required Fields");
-                return;
-            }
-        }
-        //Validating Address
+    const validateAddress = async() => {
         fetch("/api/validateAddress", {
             method: "POST",
             headers:{
@@ -114,6 +101,38 @@ function Form(props){
             setError("Failed to Verify: Check Country Code");
             return;
         })
+    }
+
+    const storePurchaseData = async(paymentIntent) => {
+        fetch("api/order/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                paymentIntent: paymentIntent,
+                shippingDetails: details,
+                items: props.cart
+            })
+        })
+    }
+    const handleSubmit = async(event) => {
+        event.preventDefault();
+        
+        //Error prevention
+        if(props.cart <= 1){
+            setError("Cart is Empty");
+            return;
+        }
+        for(let key in details){
+            if(details[key] === null || details[key].length <= 0){
+                setError("Missing Required Fields");
+                return;
+            }
+        }
+
+        //Validating Address
+        validateAddress();
 
         //Creating payment method
         let {error, paymentMethod} = await stripe.createPaymentMethod({
@@ -166,29 +185,17 @@ function Form(props){
                 console.log(result);
                 if(result.paymentIntent && result.paymentIntent.status === "succeeded"){
                     console.log("Payment Intent Success");
+                    /**
+                     * Setting order status to true will display the successful order screen
+                     * and display the details passed into order.details and shipping details
+                     */
                     setOrder({
                         status: true,
                         details: result.paymentIntent
                     })
-                    /**
-                     * Send successful order for storing
-                     * 
-                     * 
-                     * 
-                     * 
-                     */
-
-                    fetch("api/order/add", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            paymentIntent: result.paymentIntent,
-                            shippingDetails: details,
-                            items: props.cart
-                        })
-                    })
+                    //Storing Order in Database
+                    storePurchaseData(result.paymentIntent);
+                    //Emptying the cart
                     cartContext.emptyCart();
                     console.log("Successful Order Details: ");
                     console.log(details);
