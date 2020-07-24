@@ -89,17 +89,20 @@ function Form(props){
             console.log(data);
             if(data.XAVResponse.ValidAddressIndicator === ""){
                 console.log("Valid Address");
+                return true;
             } else if(data.XAVResponse.AmbiguousAddressIndicator === ""){
                 const candidate = data.XAVResponse.Candidate.AddressKeyFormat || data.XAVResponse.Candidate[0].AddressKeyFormat;
                 setError(`Did you mean: "${candidate.AddressLine}, ${candidate.Region}"? `);
+                return false;
             } else if(data.XAVResponse.NoCandidatesIndicator === ""){
                 setError("Ambiguous Address: No Candidates Found");
+                return false;
             }
         })
         .catch(e => {
             console.log(e);
             setError("Failed to Verify: Check Country Code");
-            return;
+            return false;
         })
     }
 
@@ -132,7 +135,10 @@ function Form(props){
         }
 
         //Validating Address
-        validateAddress();
+        const isValidAddress = await validateAddress();
+        if(!isValidAddress){
+            return;
+        }
 
         //Creating payment method
         let {error, paymentMethod} = await stripe.createPaymentMethod({
@@ -217,10 +223,10 @@ function Form(props){
             <form onSubmit={handleSubmit} className={styles.formContainer}>
 
                 <label htmlFor="FirstName"
-                    className={styles.detailLabel}>First Name: 
+                    className="inputLabel">First Name: 
                 </label>
                 <input 
-                    className={styles.details}
+                    className="input"
                     type="text" 
                     placeholder="First Name" 
                     id="FirstName"
@@ -228,10 +234,10 @@ function Form(props){
                 ></input>
 
                 <label htmlFor="LastName"
-                    className={styles.detailLabel}>Last Name: 
+                    className="inputLabel">Last Name: 
                 </label>
                 <input
-                    className={styles.details}
+                    className="input"
                     placeholder="Last Name"
                     id="LastName"
                     type="text"
@@ -239,10 +245,10 @@ function Form(props){
                 ></input>
 
                 <label htmlFor="Address1"
-                    className={styles.detailLabel}>Address Line 1: 
+                    className="inputLabel">Address Line 1: 
                 </label>
                 <input
-                    className={styles.details}
+                    className="input"
                     placeholder="Address Line 1"
                     id="Address1"
                     type="text"
@@ -250,10 +256,10 @@ function Form(props){
                 </input>
 
                 <label htmlFor="Address2"
-                    className={styles.detailLabel}>Address Line 2: 
+                    className="inputLabel">Address Line 2: 
                 </label>
                 <input
-                    className={styles.details}
+                    className="input"
                     placeholder="Address Line 2"
                     id="Address2"
                     type="text"
@@ -261,10 +267,10 @@ function Form(props){
                 </input>
 
                 <label htmlFor="City"
-                    className={styles.detailLabel}>City: 
+                    className="inputLabel">City: 
                 </label>
                 <input
-                    className={styles.details}
+                    className="input"
                     placeholder="City"
                     id="City"
                     type="text"
@@ -272,10 +278,10 @@ function Form(props){
                 </input>
 
                 <label htmlFor="State"
-                    className={styles.detailLabel}>State: 
+                    className="inputLabel">State: 
                 </label>
                 <input
-                    className={styles.details}
+                    className="input"
                     placeholder="State"
                     id="State"
                     type="text"
@@ -283,10 +289,10 @@ function Form(props){
                 </input>
 
                 <label htmlFor="Zip"
-                    className={styles.detailLabel}>ZIP: 
+                    className="inputLabel">ZIP: 
                 </label>
                 <input
-                    className={styles.details}
+                    className="input"
                     placeholder="ZIP"
                     id="Zip"
                     type="text"
@@ -294,10 +300,10 @@ function Form(props){
                 </input>
 
                 <label htmlFor="CountryCode"
-                    className={styles.detailLabel}>Country Code: 
+                    className="inputLabel">Country Code: 
                 </label>
                 <input
-                    className={styles.details}
+                    className="input"
                     placeholder="Country Code"
                     id="CountryCode"
                     type="text"
@@ -315,10 +321,10 @@ function Form(props){
                         })
                     }
                 </ul>
-                <div className={styles.errorDiv}>
-                <span className={styles.errorMsg}>{error}</span>
+                <div className="errorDiv">
+                <span className="errorMsg">{error}</span>
                 {
-                    !disabledBtn && stripe ? <button className={styles.pay} type="submit">Pay</button> : <span className={styles.submiting}>Submiting...</span>
+                    !disabledBtn && stripe ? <button className="btn" type="submit">Pay</button> : <span className={styles.submiting}>Submiting...</span>
                 }
                 </div>
             </form>
@@ -336,7 +342,7 @@ function Form(props){
     
 
     return (
-        <div className={styles.container}>
+        <div className="cardContainer">
             {form}
         </div>
     )

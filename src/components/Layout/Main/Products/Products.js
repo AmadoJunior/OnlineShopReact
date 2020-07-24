@@ -44,7 +44,7 @@ function Products(){
                                 <h3 className={styles.title}>{item.name}</h3>
                                 <span className={styles.price}>Price: ${item.price}</span>
                                 <button 
-                                className={styles.addToCart}
+                                className="btn"
                                 onClick={() => cartContext.addToCart(item)}
                                 >Add to Cart</button>
                             </div>

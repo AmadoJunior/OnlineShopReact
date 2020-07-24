@@ -14,7 +14,7 @@ function Cart(props){
     return (
         <div className={styles.container}>
             <div className={styles.triangle}></div>
-            <h1>Cart</h1>
+            <h3>Cart</h3>
             <ul>
             {
                 cartContext.cart.map((item) => {
@@ -34,7 +34,7 @@ function Cart(props){
             }
             </ul>
             {
-                !cartContext.empty ? <Link to="/checkout" className={styles.btn} onClick={props.handlePopUp}>Checkout</Link> : null
+                !cartContext.empty ? <Link to="/checkout" className="btn" onClick={props.handlePopUp}>Checkout</Link> : null
             }
         </div>
     )

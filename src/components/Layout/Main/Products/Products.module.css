@@ -7,21 +7,11 @@
     padding: 15px;
 }
 .title{
-    margin: 15px 15px 0px 15px;
+    margin: 15px 10px 0px 10px;
 }
-.addToCart{
-    cursor: pointer;
-    margin: 15px 15px 0px 15px;
-    background: rgba(81, 78, 228, 0.8);
-    border:none;
-    color: white;
-    padding: 10px 15px 10px 15px;
-}
-.addToCart:hover{
-    background: rgba(60, 58, 189, 0.8) !important;
-  }
 .price{
-    margin: 15px 15px 0px 15px;
+    margin: 10px 10px 0px 10px;
+    font-size: 14px;
 }
 .list{
     display:flex;
