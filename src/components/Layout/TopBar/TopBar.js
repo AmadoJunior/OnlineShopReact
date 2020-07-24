@@ -39,7 +39,8 @@ function TopBar(){
             <nav>
                 <Link to="/" className={styles.options}>Home</Link>
                 <Link to="/products" className={styles.options}>Products</Link>
-                <img src={cart} onClick={handlePopUp} className={cartBtnClass}></img>
+                <Link to="/account" className={styles.options}>Account</Link>
+                <img src={cart} alt="cartIcon" onClick={handlePopUp} className={cartBtnClass}></img>
                 <span style={hide} className={styles.itemsInCart}>{cartContext.cart.length}</span>
                 <Cart
                 visibility={cartVisibility}

@@ -1,0 +1,43 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 4px 24px rgba(0, 0, 0, 0.25);
+    width: 500px;
+    padding: 20px;
+    margin: 15px;
+}
+.input{
+    border: none;
+    padding: 8px;
+}
+.detailLabel{
+    font-size: 14px;
+}
+.btn{
+    width: 100px;
+    cursor: pointer;
+    background-color: rgba(80, 78, 228, 0.911);
+    border: none;
+    padding: 10px;
+    color: white;
+}
+.btn:hover{
+    background: rgba(60, 58, 189, 0.8) !important;
+}
+.errorDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.errorMsg{
+    color: red;
+    font-size: 12px;
+    padding: 5px;
+}
+.switch{
+    cursor: pointer;
+    font-size: 13px;
+    padding-top: 10px;
+    color: rgba(80, 78, 228, 0.911);
+}

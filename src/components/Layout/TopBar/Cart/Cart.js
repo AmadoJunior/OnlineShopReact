@@ -22,6 +22,7 @@ function Cart(props){
                         <li
                         key={item._id}>
                         <img 
+                        alt={item.name}
                         src={rm} 
                         className={styles.rm}
                         onClick={() => cartContext.rmFromCart(item._id)}>
