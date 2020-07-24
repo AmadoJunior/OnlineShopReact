@@ -16,6 +16,7 @@ function Form(props){
     //State
     const stripe = useStripe();
     const elements = useElements();
+    const [validAddressStatus, updateAddressStatus] = useState(false);
     const [details, setDetails] = useState({
         firstName: null,
         lastName: null,
@@ -77,33 +78,36 @@ function Form(props){
 
     //Methods
     const validateAddress = async() => {
-        fetch("/api/validateAddress", {
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(details)
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            if(data.XAVResponse.ValidAddressIndicator === ""){
-                console.log("Valid Address");
-                return true;
-            } else if(data.XAVResponse.AmbiguousAddressIndicator === ""){
-                const candidate = data.XAVResponse.Candidate.AddressKeyFormat || data.XAVResponse.Candidate[0].AddressKeyFormat;
-                setError(`Did you mean: "${candidate.AddressLine}, ${candidate.Region}"? `);
+        return new Promise((resolve, reject) => {
+            fetch("/api/validateAddress", {
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(details)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if(data.XAVResponse.ValidAddressIndicator === ""){
+                    console.log("Valid Address");
+                    resolve(true);
+                } else if(data.XAVResponse.AmbiguousAddressIndicator === ""){
+                    const candidate = data.XAVResponse.Candidate.AddressKeyFormat || data.XAVResponse.Candidate[0].AddressKeyFormat;
+                    setError(`Did you mean: "${candidate.AddressLine}, ${candidate.Region}"? `);
+                    resolve(false);
+                } else if(data.XAVResponse.NoCandidatesIndicator === ""){
+                    setError("Ambiguous Address: No Candidates Found");
+                    resolve(false);
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                setError("Failed to Verify: Check Country Code");
                 return false;
-            } else if(data.XAVResponse.NoCandidatesIndicator === ""){
-                setError("Ambiguous Address: No Candidates Found");
-                return false;
-            }
+            })
         })
-        .catch(e => {
-            console.log(e);
-            setError("Failed to Verify: Check Country Code");
-            return false;
-        })
+        
     }
 
     const storePurchaseData = async(paymentIntent) => {
@@ -135,10 +139,8 @@ function Form(props){
         }
 
         //Validating Address
-        const isValidAddress = await validateAddress();
-        if(!isValidAddress){
-            return;
-        }
+        let addressResult = await validateAddress();
+        updateAddressStatus(addressResult);
 
         //Creating payment method
         let {error, paymentMethod} = await stripe.createPaymentMethod({
@@ -146,7 +148,7 @@ function Form(props){
             card: elements.getElement(CardElement)
         })
         //If payment method successfully added
-        if(!error){
+        if(!error && validAddressStatus){
             //Retrieving items to order and the payment method ID 
             let cardProductsIDArray = [];
             const {id} = paymentMethod;
@@ -211,7 +213,7 @@ function Form(props){
                     setDisabledBtn(false);
                 }
             })
-        } else {
+        } else if(validAddressStatus) {
             //Set the error coming from stripe.createPaymentMethod
             setError(error.message);
         }
@@ -324,7 +326,7 @@ function Form(props){
                 <div className="errorDiv">
                 <span className="errorMsg">{error}</span>
                 {
-                    !disabledBtn && stripe ? <button className="btn" type="submit">Pay</button> : <span className={styles.submiting}>Submiting...</span>
+                    !disabledBtn && stripe ? <button className="btn" type="submit">Submit</button> : <span className={styles.submiting}>Submiting...</span>
                 }
                 </div>
             </form>
