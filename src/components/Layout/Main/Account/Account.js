@@ -1,25 +1,43 @@
-import React from "react";
+import React, {useState} from "react";
+import SignIn from "./signIn/signIn";
+import SignUp from "./signUp/signUp";
 import styles from "./Account.module.css";
 
 function Account() {
+    //State
+    const [recurring, setRecurring] = useState(true);
+
+    //Methods
+    const switchView = () => {
+        setRecurring(!recurring);
+    }
+
+    //Render
+    let view = null;
+    if(recurring){
+        view = (
+            <SignIn>
+                <span 
+                className={styles.switchBtn}
+                onClick={switchView}
+                >Sign Up</span>
+            </SignIn>
+        )
+    } else {
+        view = (
+            <SignUp>
+                <span 
+                className={styles.switchBtn}
+                onClick={switchView}
+                >Sign In</span>
+            </SignUp>
+        )
+    }
+
     return (
         <div className="cardContainer">
-            <div className={styles.formContainer}>
-                <h3>Account</h3>
-                <label htmlFor="userName" className="inputLabel">User Name: </label>
-                <input type="text" id="userName" className="input" placeHolder="User Name"></input>
-                <label htmlFor="email" className="inputLabel">Email: </label>
-                <input type="text" id="email" className="input" placeHolder="Email"></input>
-                <label htmlFor="password" className="inputLabel">Password: </label>
-                <input type="text" id="password" className="input" placeHolder="Password"></input>
-
-                <div className="errorDiv">
-                    <span className="errorMsg">Error</span>
-                    <button className="btn">Sign in</button>
-                    <span className={styles.switchBtn}>Sign Up</span>
-                </div>
-            
-            </div>
+            <h3>Account</h3>
+            {view}
         </div>
         
     )

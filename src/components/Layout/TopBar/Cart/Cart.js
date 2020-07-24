@@ -1,11 +1,11 @@
 import React, {useContext} from "react";
-import CartContext from "./../../../../Context/CartContext";
+import UserContext from "./../../../../Context/UserContext";
 import {Link} from "react-router-dom";
 import styles from "./Cart.module.css";
 import rm from "./../../../../assets/rm.png";
 
 function Cart(props){
-    const cartContext = useContext(CartContext);
+    const userContext = useContext(UserContext);
 
     if(!props.visibility){
         return null;
@@ -17,7 +17,7 @@ function Cart(props){
             <h3>Cart</h3>
             <ul>
             {
-                cartContext.cart.map((item) => {
+                userContext.cart.map((item) => {
                     return(
                         <li
                         key={item._id}>
@@ -25,7 +25,7 @@ function Cart(props){
                         alt={item.name}
                         src={rm} 
                         className={styles.rm}
-                        onClick={() => cartContext.rmFromCart(item._id)}>
+                        onClick={() => userContext.rmFromCart(item._id)}>
                         </img>
                         {item.name}
                         </li>
@@ -34,7 +34,7 @@ function Cart(props){
             }
             </ul>
             {
-                !cartContext.empty ? <Link to="/checkout" className="btn" onClick={props.handlePopUp}>Checkout</Link> : null
+                !userContext.empty ? <Link to="/checkout" className="btn" onClick={props.handlePopUp}>Checkout</Link> : null
             }
         </div>
     )

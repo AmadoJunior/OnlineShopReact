@@ -6,13 +6,13 @@ import {
 } from '@stripe/react-stripe-js';
 //CSS
 import styles from "./Form.module.css";
-import CartContext from "../../../../../Context/CartContext";
+import UserContext from "../../../../../Context/UserContext";
 
 function Form(props){
     //Render
     let form = null;
     //Context
-    const cartContext = useContext(CartContext);
+    const userContext = useContext(UserContext);
     //State
     const stripe = useStripe();
     const elements = useElements();
@@ -204,7 +204,7 @@ function Form(props){
                     //Storing Order in Database
                     storePurchaseData(result.paymentIntent);
                     //Emptying the cart
-                    cartContext.emptyCart();
+                    userContext.emptyCart();
                     console.log("Successful Order Details: ");
                     console.log(details);
                 } else {

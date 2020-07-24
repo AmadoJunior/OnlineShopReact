@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import CartContext from "./../../../../Context/CartContext";
+import UserContext from "./../../../../Context/UserContext";
 //Stripe
 import {loadStripe} from "@stripe/stripe-js";
 import {Elements} from "@stripe/react-stripe-js";
@@ -11,12 +11,12 @@ import styles from "./Checkout.module.css";
 const stripePromise = loadStripe("pk_test_51H21ztCry59PymPscIQPY4uHdvRTvr76BbhS0NZABgmNyVgkWuIBdAkjhuw6pMuOsDcGjK6KJlH8DtEkClawCe0L00lDZXAr2b");
 
 function Checkout(){
-    const cartContext = useContext(CartContext);
+    const userContext = useContext(UserContext);
 
     return (
         <div className={styles.container}>
             <Elements stripe={stripePromise}>
-                <Form cart={cartContext.cart}></Form>
+                <Form cart={userContext.cart}></Form>
             </Elements>
         </div>
     )
