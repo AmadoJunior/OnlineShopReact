@@ -73,7 +73,7 @@ function SignUp(props){
                 setError(data.error);
             } else {
                 setError("");
-                console.log(data.message);
+                props.setRecurring(true);
             }
         })
         .catch(err => {

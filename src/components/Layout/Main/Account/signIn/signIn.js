@@ -76,7 +76,7 @@ function SignIn(props){
                 setError(data.error);
             } else {
                 setError("");
-                userContext.updateUser(data);
+                userContext.setUserData(data);
                 localStorage.setItem("userData", JSON.stringify(data));
             }
         })

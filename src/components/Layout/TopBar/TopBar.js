@@ -22,7 +22,7 @@ function TopBar(){
         cartBtnClass = styles.cartOff;
     }
     let hide;
-    if(userContext.cart.length <= 0){
+    if(userContext.cart && userContext.cart.length <= 0){
         hide={
             visibility: `hidden`
         }

@@ -15,6 +15,13 @@ const UserContext = React.createContext({
     setUserData: () => {
 
     },
+    isLoggedIn: false,
+    setLoggedIn: () => {
+
+    },
+    logOut: () => {
+
+    },
     empty: true
 })
 

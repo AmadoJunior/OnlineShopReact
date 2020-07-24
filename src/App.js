@@ -1,20 +1,26 @@
 //React
 import React, {useState, useEffect} from 'react';
+import io from "socket.io-client";
 //Css
 import './App.css';
 //Components
 import Layout from "./components/Layout/Layout";
 import UserContext from "./Context/UserContext";
 
+let socket;
+
 function App() {
   //State
-  const [userData, setUserData] = useState({
-  })
+  const [userData, setUserData] = useState({});
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const [cart, setCart] = useState([]);
   const [empty, setEmpty] = useState(true);
 
   //Effect
   useEffect(() => {
+    //Initiating IO
+    socket = io();
+    //Fetching User/Cart Data 
     let data = JSON.parse(localStorage.getItem("userData"));
     if(data !== null){
       setUserData(data);
@@ -31,12 +37,32 @@ function App() {
       })
       .then(res => res.json())
       .then(data => {
-        setCart(data.cart)
-        setEmpty(false);
+        setLoggedIn(true);
+        let cartArr = data.cart;
+        setCart(cartArr)
+        if(cartArr.length <= 0){
+          setEmpty(true);
+        } else {
+          setEmpty(false);
+        }
       })
+      .catch(error => {
+        console.log(error);
+      })
+    } else {
+      setLoggedIn(false);
     }
 
   }, [])
+
+  useEffect(() => {
+    socket.on("loggedIn", () => {
+      setLoggedIn(true);
+    })
+    return () => {
+      socket.off("loggedIn")
+    }
+  })
 
   //Methods
   const addToCart = async(item) => {
@@ -55,16 +81,13 @@ function App() {
     })
     .then(res => res.json())
     .then(data => {
+      setCart(tempArr);
       console.log(data);
     })
     .catch(e => {
       console.log(e);
     })
     
-  }
-
-  const updateUser = (userDataFromToken) => {
-    setUserData({...userDataFromToken});
   }
 
   const rmFromCart = (id) => {
@@ -86,6 +109,7 @@ function App() {
     .then(res => res.json())
     .then(data => {
       console.log(data);
+      setCart(tempArr);
     })
     .catch(e => {
       console.log(e);
@@ -101,6 +125,13 @@ function App() {
     setEmpty(true);
   }
 
+  const logOut = () => {
+    emptyCart();
+    setUserData({});
+    setLoggedIn(false);
+    localStorage.removeItem("userData");
+  }
+
   return (
     
       <UserContext.Provider
@@ -110,7 +141,10 @@ function App() {
           addToCart: addToCart,
           rmFromCart: rmFromCart,
           emptyCart: emptyCart,
-          updateUser: updateUser,
+          setUserData: setUserData,
+          isLoggedIn: isLoggedIn,
+          setLoggedIn: setLoggedIn,
+          logOut: logOut,
           empty: empty
         }}>
         <div className="App">
